@@ -4,11 +4,11 @@ namespace CarsApi.Repositories.Interfaces
     {
     public interface ICarRepository
         {
-        IEnumerable<Car> GetAllCars();
-        IEnumerable<Car> GetCarsByColor(string color);
-        Car GetCar(int id);
-        Car AddCar(Car car);
-        Car UpdateCar(int id, Car car);
-        void DeleteCar(int id);
+        Task<IEnumerable<Car>> GetAllCarsAsync();
+        Task<IEnumerable<Car>> GetCarsByColorAsync(string color);
+        Task<Car> GetCarAsync(int id);
+        Task<Car> AddCarAsync(Car car);
+        Task<Car> UpdateCarAsync(int id, Car car);
+        Task DeleteCarAsync(int id);
         }
     }

@@ -1,62 +1,82 @@
-﻿using CarsApi.DataStorage.Interfaces;
+﻿using CarsApi.DataStorage;
+using CarsApi.DataStorage.Interfaces;
 using CarsApi.Models;
 using CarsApi.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarsApi.Repositories
     {
     public class CarRepository : ICarRepository
         {
-        private readonly ICarStorage _carStorage;
-        private int _nextId = 1;
+        
 
-        public CarRepository(ICarStorage carStorage)
+        private readonly CarsApiDbContext _context;
+        private readonly ILogger<CarRepository> _logger;
+
+        public CarRepository(CarsApiDbContext context, ILogger<CarRepository> logger)
             {
-            _carStorage = carStorage;
+            _context = context;
+            _logger = logger;
             }
 
-        public IEnumerable<Car> GetAllCars()
+        public async Task<IEnumerable<Car>> GetAllCarsAsync()
             {
-            return _carStorage.Cars;
+            _logger.LogInformation("Retrieving all cars");
+            return await _context.Cars.ToListAsync();
             }
 
-        public IEnumerable<Car> GetCarsByColor(string color)
+        public async Task<IEnumerable<Car>> GetCarsByColorAsync(string color)
             {
-            return _carStorage.Cars.Where(c => c.Color.Equals(color, StringComparison.OrdinalIgnoreCase));
+            _logger.LogInformation($"Retrieving cars by color: {color}.");
+            return await _context.Cars.Where(c => c.Color.Equals(color)).ToListAsync();
             }
 
-        public Car GetCar(int id)
+        public async Task<Car> GetCarAsync(int id)
             {
-            return _carStorage.Cars.FirstOrDefault(c => c.Id == id);
+            _logger.LogInformation($"Retrieving car with ID: {id}.");
+            return await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
             }
 
-        public Car AddCar(Car car)
+        public async Task<Car> AddCarAsync(Car car)
             {
-            car.Id = _nextId++;
-            _carStorage.Cars.Add(car);
+            await _context.Cars.AddAsync(car);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation($"Car added with ID: {car.Id}");
             return car;
             }
 
-        public Car UpdateCar(int id, Car car)
+        public async Task<Car> UpdateCarAsync(int id, Car updatedCar)
             {
-            var carToUpdate = GetCar(id);
-            if (carToUpdate == null)
+            var car = await GetCarAsync(id);
+            if (car == null)
                 {
+                _logger.LogWarning($"Update failed. Car with ID: {id} not found.");
                 return null;
                 }
 
-            carToUpdate.Make = car.Make;
-            carToUpdate.Model = car.Model;
-            carToUpdate.Color = car.Color;
+            car.Make = updatedCar.Make;
+            car.Model = updatedCar.Model;
+            car.Color = updatedCar.Color;
 
-            return carToUpdate;
+            _context.Cars.Update(car);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation($"Car updated with ID: {car.Id}");
+            return car;
             }
 
-        public void DeleteCar(int id)
+        public async Task DeleteCarAsync(int id)
             {
-            var car = GetCar(id);
+            var car = await GetCarAsync(id);
             if (car != null)
                 {
-                _carStorage.Cars.Remove(car);
+                _context.Cars.Remove(car);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"Car deleted with ID: {id}");
+                }
+            else
+                {
+                _logger.LogWarning($"Delete failed. Car with ID: {id} not found.");
                 }
             }
         }

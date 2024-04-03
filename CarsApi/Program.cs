@@ -5,6 +5,7 @@ using CarsApi.Services.Interfaces;
 using CarsApi.Services;
 using CarsApi.DataStorage.Interfaces;
 using CarsApi.DataStorage;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarsApi
     {
@@ -21,10 +22,16 @@ namespace CarsApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddSingleton<ICarStorage, CarStorage>();
-            builder.Services.AddSingleton<ICarRepository, CarRepository>();
-            builder.Services.AddTransient<ICarService, CarService>();
+            builder.Services.AddDbContext<CarsApiDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
 
+            //builder.Services.AddSingleton<ICarStorage, CarStorage>();
+
+            builder.Services.AddScoped<ICarRepository, CarRepository>();
+            builder.Services.AddScoped<ICarService, CarService>();
+
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
 
             var app = builder.Build();
 

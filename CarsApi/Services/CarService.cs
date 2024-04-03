@@ -14,41 +14,41 @@ namespace CarsApi.Services
             _carRepository = carRepository;
             }
 
-        public IEnumerable<CarDto> GetAllCars()
+        public async Task<IEnumerable<CarDto>> GetAllCarsAsync()
             {
-            var cars = _carRepository.GetAllCars();
+            var cars = await _carRepository.GetAllCarsAsync();
             return cars.Select(c => ToDto(c));
             }
 
-        public CarDto GetCarById(int id)
+        public async Task<CarDto> GetCarByIdAsync(int id)
             {
-            var car = _carRepository.GetCar(id);
+            var car = await _carRepository.GetCarAsync(id);
             return car != null ? ToDto(car) : null;
             }
 
-        public IEnumerable<CarDto> GetCarsByColor(string color)
+        public async Task<IEnumerable<CarDto>> GetCarsByColorAsync(string color)
             {
-            var cars = _carRepository.GetCarsByColor(color);
+            var cars = await _carRepository.GetCarsByColorAsync(color);
             return cars.Select(c => ToDto(c));
             }
 
-        public CarDto AddCar(CarDto carDto)
+        public async Task<CarDto> AddCarAsync(CarDto carDto)
             {
             var car = ToDomainModel(carDto);
-            var addedCar = _carRepository.AddCar(car);
+            var addedCar = await _carRepository.AddCarAsync(car);
             return ToDto(addedCar);
             }
 
-        public CarDto UpdateCar(int id, CarDto carDto)
+        public async Task<CarDto> UpdateCarAsync(int id, CarDto carDto)
             {
             var carToUpdate = ToDomainModel(carDto);
-            var updatedCar = _carRepository.UpdateCar(id, carToUpdate);
+            var updatedCar = await _carRepository.UpdateCarAsync(id, carToUpdate);
             return updatedCar != null ? ToDto(updatedCar) : null;
             }
 
-        public void DeleteCar(int id)
+        public async Task DeleteCarAsync(int id)
             {
-            _carRepository.DeleteCar(id);
+            await _carRepository.DeleteCarAsync(id);
             }
 
         private static CarDto ToDto(Car car)

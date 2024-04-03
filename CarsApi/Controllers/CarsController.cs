@@ -15,39 +15,41 @@ namespace CarsApi.Controllers
             _carService = carService;
             }
         [HttpGet]
-        public ActionResult<IEnumerable<CarDto>> GetAllCars()
+        public async Task<ActionResult<IEnumerable<CarDto>>> GetAllCarsAsync()
             {
-            var cars = _carService.GetAllCars();
+            var cars = await _carService.GetAllCarsAsync();
             return Ok(cars);
             }
 
-        [HttpGet]
-        [Route("{id:int}")]
-        public ActionResult<CarDto> GetCarById([FromRoute] int id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<CarDto>> GetCarByIdAsync([FromRoute] int id)
             {
-            var car = _carService.GetCarById(id);
+            var car = await _carService.GetCarByIdAsync(id);
             if (car == null)
                 {
                 return NotFound();
                 }
             return Ok(car);
             }
+
         [HttpGet("ByColor")]
-        public ActionResult<IEnumerable<CarDto>> GetCarByColor([FromQuery] string color)
+        public async Task<ActionResult<IEnumerable<CarDto>>> GetCarByColorAsync([FromQuery] string color)
             {
-            var cars = _carService.GetCarsByColor(color);
+            var cars = await _carService.GetCarsByColorAsync(color);
             return Ok(cars);
             }
+
         [HttpPost]
-        public ActionResult<CarDto> AddCar([FromBody] CarDto carDto)
+        public async Task<ActionResult<CarDto>> AddCarAsync([FromBody] CarDto carDto)
             {
-            var newCar = _carService.AddCar(carDto);
+            var newCar = await _carService.AddCarAsync(carDto);
             return Ok(newCar);
             }
+
         [HttpPut("{id}")]
-        public ActionResult<CarDto> UpdateCar([FromRoute] int id, [FromBody] CarDto carDto)
+        public async Task<ActionResult<CarDto>> UpdateCarAsync([FromRoute] int id, [FromBody] CarDto carDto)
             {
-            var updatedCar = _carService.UpdateCar(id, carDto);
+            var updatedCar = await _carService.UpdateCarAsync(id, carDto);
             if (updatedCar == null)
                 {
                 return NotFound();
@@ -56,9 +58,9 @@ namespace CarsApi.Controllers
             }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteCar([FromRoute] int id)
+        public async Task<IActionResult> DeleteCarAsync([FromRoute] int id)
             {
-            _carService.DeleteCar(id);
+            await _carService.DeleteCarAsync(id);
             return NoContent();
             }
         }
