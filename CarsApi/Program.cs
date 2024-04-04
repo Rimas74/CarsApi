@@ -29,6 +29,7 @@ namespace CarsApi
 
             builder.Services.AddScoped<ICarRepository, CarRepository>();
             builder.Services.AddScoped<ICarService, CarService>();
+            builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
