@@ -1,5 +1,6 @@
 ﻿using CarsApi.DTOs;
 using CarsApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace CarsApi.Controllers
     {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CarsController : ControllerBase
         {
         private readonly ICarService _carService;
