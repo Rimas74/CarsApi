@@ -4,7 +4,12 @@ namespace CarsApi.Repositories.Interfaces
     {
     public interface ICarRepository
         {
-        Task<IEnumerable<Car>> GetAllCarsAsync();
+        Task<IEnumerable<Car>> GetAllCarsAsync(
+            string? filterOn = null,
+            string? filterQuery = null,
+            string? sortBy = null,
+            bool? isAscending = true
+            );
         Task<IEnumerable<Car>> GetCarsByColorAsync(string color);
         Task<Car> GetCarAsync(int id);
         Task<Car> AddCarAsync(Car car);

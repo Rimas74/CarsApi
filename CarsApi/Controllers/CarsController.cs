@@ -14,12 +14,22 @@ namespace CarsApi.Controllers
             {
             _carService = carService;
             }
+
+        //GET Car
+        //GET:/ api/cars?filterOn=Make&filterQuery=Toyota
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CarDto>>> GetAllCarsAsync()
+        public async Task<ActionResult<IEnumerable<CarDto>>> GetAllCarsAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending)
             {
-            var cars = await _carService.GetAllCarsAsync();
+            var cars = await _carService.GetAllCarsAsync(filterOn, filterQuery, sortBy, isAscending ?? true);
             return Ok(cars);
             }
+
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<CarDto>>> GetAllCarsAsync()
+        //    {
+        //    var cars = await _carService.GetAllCarsAsync();
+        //    return Ok(cars);
+        //    }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<CarDto>> GetCarByIdAsync([FromRoute] int id)
@@ -31,6 +41,8 @@ namespace CarsApi.Controllers
                 }
             return Ok(car);
             }
+
+
 
         [HttpGet("ByColor")]
         public async Task<ActionResult<IEnumerable<CarDto>>> GetCarByColorAsync([FromQuery] string color)

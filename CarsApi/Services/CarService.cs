@@ -17,9 +17,12 @@ namespace CarsApi.Services
             _mapper = mapper;
             }
 
-        public async Task<IEnumerable<CarDto>> GetAllCarsAsync()
+        public async Task<IEnumerable<CarDto>> GetAllCarsAsync(string? filterOn = null,
+            string? filterQuery = null,
+            string? sortBy = null,
+            bool? isAscending = true)
             {
-            var cars = await _carRepository.GetAllCarsAsync();
+            var cars = await _carRepository.GetAllCarsAsync(filterOn, filterQuery, sortBy, isAscending);
             return _mapper.Map<IEnumerable<CarDto>>(cars);
             }
 

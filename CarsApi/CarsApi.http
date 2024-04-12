@@ -1,6 +1,26 @@
-@CarsApi_HostAddress = http://localhost:5278
+@CarsApi_HostAddress = https://localhost:7066
 
-GET {{CarsApi_HostAddress}}/weatherforecast/
-Accept: application/json
+
+GET {{CarsApi_HostAddress}}/api/cars
+
+###
+
+POST {{CarsApi_HostAddress}}/api/cars
+Content-Type: application/json
+
+{
+  "make": "fiat",
+    "model": "500",
+    "color": "red"
+}
+
+###
+
+GET {{CarsApi_HostAddress}}/api/cars/ByColor?color=blue
+
+###
+
+
+GET {{CarsApi_HostAddress}}/api/cars/15
 
 ###
