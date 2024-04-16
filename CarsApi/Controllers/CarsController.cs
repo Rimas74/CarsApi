@@ -17,7 +17,7 @@ namespace CarsApi.Controllers
             _carService = carService;
             }
 
-        //GET Car
+        //GET Cara
         //GET:/ api/cars?filterOn=Make&filterQuery=Toyota
         [HttpGet]
         [Authorize(Roles = "Reader, Writer")]
@@ -55,6 +55,10 @@ namespace CarsApi.Controllers
         [Authorize(Roles = "Writer")]
         public async Task<ActionResult<CarDto>> AddCarAsync([FromBody] CarDto carDto)
             {
+            if (carDto == null)
+                {
+                return BadRequest("Input car data is required.");
+                }
             var newCar = await _carService.AddCarAsync(carDto);
             return Ok(newCar);
             }
