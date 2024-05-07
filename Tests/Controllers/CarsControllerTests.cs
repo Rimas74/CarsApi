@@ -8,25 +8,16 @@ using Moq;
 using Xunit;
 
 public class CarsControllerTests
-{
+    {
     private readonly Mock<ICarService> _mockCarService;
     private readonly CarsController _controller;
 
-
     public CarsControllerTests()
-    {
+        {
         _mockCarService = new Mock<ICarService>();
         _controller = new CarsController(_mockCarService.Object);
-    }
+        }
 
-<<<<<<< HEAD
-    [Theory, CustomAutoData]
-    public async Task GetAllCarsAsync_ReturnsAllCars(CarDto carDto)
-    {
-        // Arrange
-        var mockCars = new List<CarDto> { carDto };
-    }
-=======
     [Fact]
     public async Task GetAllCarsAsync_ReturnsAllCars()
         {
@@ -44,13 +35,6 @@ public class CarsControllerTests
         _mockCarService.Verify(s => s.GetAllCarsAsync(null, null, null, true), Times.Once);
         }
 
-<<<<<<< HEAD
-    [Theory, CustomAutoData]
-    public async Task GetCarByIdAsync_ReturnsCar_WhenCarExists(CarDto carDto)
-        {
-        // Arrange
-        //var carDto = new CarDto { Make = "Toyota", Model = "Corolla", Color = "Red" };
-=======
     [Fact]
     public async Task GetCarByIdAsync_ReturnsCar_WhenCarExists()
         {
@@ -67,10 +51,6 @@ public class CarsControllerTests
         Assert.Equal(carDto, okResult.Value);
         }
 
-<<<<<<< HEAD
-    [Theory, CustomAutoData]
-    public async Task GetCarByIdAsync_ReturnsNotFound_WhenCarDoesNotExist(CarDto carDto)
-=======
     [Fact]
     public async Task GetCarByIdAsync_ReturnsNotFound_WhenCarDoesNotExist()
         {
@@ -81,13 +61,6 @@ public class CarsControllerTests
 
         Assert.IsType<NotFoundResult>(result.Result);
         }
-<<<<<<< HEAD
-    [Theory, CustomAutoData]
-    public async Task UpdateCarAsync_ReturnsUpdatedCarDto_WhenUpdateIsSuccessful(CarDto carDto)
-        {
-        // Arrange
-
-=======
     [Fact]
     public async Task UpdateCarAsync_ReturnsUpdatedCarDto_WhenUpdateIsSuccessful()
         {
@@ -104,12 +77,6 @@ public class CarsControllerTests
         Assert.Equal(carDto, okResult.Value);
         }
 
-<<<<<<< HEAD
-    [Theory, CustomAutoData]
-    public async Task UpdateCarAsync_ReturnsNotFound_WhenCarDoesNotExist(CarDto carDto)
-        {
-
-=======
     [Fact]
     public async Task UpdateCarAsync_ReturnsNotFound_WhenCarDoesNotExist()
         {
@@ -121,9 +88,6 @@ public class CarsControllerTests
 
         Assert.IsType<NotFoundResult>(result.Result);
         }
-<<<<<<< HEAD
-    [Theory, CustomAutoData]
-=======
     [Fact]
     public async Task DeleteCarAsync_ReturnsNoContent_WhenDeleteIsSuccessful()
         {
@@ -135,13 +99,6 @@ public class CarsControllerTests
         Assert.IsType<NoContentResult>(result);
         _mockCarService.Verify(s => s.DeleteCarAsync(carId), Times.Once);
         }
-<<<<<<< HEAD
-    [Theory, CustomAutoData]
-    public async Task AddCarAsync_ReturnsAddedCarDto_WhenAdditionIsSuccessful(CarDto carDto)
-        {
-        // Arrange
-
-=======
     [Fact]
     public async Task AddCarAsync_ReturnsAddedCarDto_WhenAdditionIsSuccessful()
         {
@@ -156,15 +113,6 @@ public class CarsControllerTests
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         var returnedCarDto = okResult.Value as CarDto;
         Assert.NotNull(returnedCarDto);
-<<<<<<< HEAD
-        Assert.Equal(carDto.Make, returnedCarDto.Make);
-        Assert.Equal(carDto.Model, returnedCarDto.Model);
-        Assert.Equal(carDto.Color, returnedCarDto.Color);
-
-        }
-
-    [Theory, CustomAutoData]
-=======
         Assert.Equal("Honda", returnedCarDto.Make);
         Assert.Equal("Civic", returnedCarDto.Model);
         Assert.Equal("Blue", returnedCarDto.Color);
