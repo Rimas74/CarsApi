@@ -2,14 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 
 namespace CarsApi.DataStorage
+{
+    public class CarsApiDbContext : DbContext
     {
-    public class CarsApiDbContext:DbContext
-        {
         public DbSet<Car> Cars { get; set; }
-        public CarsApiDbContext(DbContextOptions<CarsApiDbContext> options):base (options) { }
+        public DbSet<Image> Images { get; set; }
+        public CarsApiDbContext(DbContextOptions<CarsApiDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-            {
+        {
             base.OnModelCreating(modelBuilder);
-            }
         }
     }
+}

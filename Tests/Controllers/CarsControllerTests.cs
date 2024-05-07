@@ -8,22 +8,30 @@ using Moq;
 using Xunit;
 
 public class CarsControllerTests
-    {
+{
     private readonly Mock<ICarService> _mockCarService;
     private readonly CarsController _controller;
 
 
     public CarsControllerTests()
-        {
+    {
         _mockCarService = new Mock<ICarService>();
         _controller = new CarsController(_mockCarService.Object);
-        }
+    }
 
+<<<<<<< HEAD
     [Theory, CustomAutoData]
     public async Task GetAllCarsAsync_ReturnsAllCars(CarDto carDto)
-        {
+    {
         // Arrange
         var mockCars = new List<CarDto> { carDto };
+    }
+=======
+    [Fact]
+    public async Task GetAllCarsAsync_ReturnsAllCars()
+        {
+        // Arrange
+        var mockCars = new List<CarDto> { new CarDto { Make = "Toyota", Model = "Corolla", Color = "Red" } };
         _mockCarService.Setup(s => s.GetAllCarsAsync(null, null, null, true)).ReturnsAsync(mockCars);
 
         // Act
@@ -36,11 +44,18 @@ public class CarsControllerTests
         _mockCarService.Verify(s => s.GetAllCarsAsync(null, null, null, true), Times.Once);
         }
 
+<<<<<<< HEAD
     [Theory, CustomAutoData]
     public async Task GetCarByIdAsync_ReturnsCar_WhenCarExists(CarDto carDto)
         {
         // Arrange
         //var carDto = new CarDto { Make = "Toyota", Model = "Corolla", Color = "Red" };
+=======
+    [Fact]
+    public async Task GetCarByIdAsync_ReturnsCar_WhenCarExists()
+        {
+        // Arrange
+        var carDto = new CarDto { Make = "Toyota", Model = "Corolla", Color = "Red" };
         int carId = 1;
         _mockCarService.Setup(s => s.GetCarByIdAsync(carId)).ReturnsAsync(carDto);
 
@@ -52,8 +67,12 @@ public class CarsControllerTests
         Assert.Equal(carDto, okResult.Value);
         }
 
+<<<<<<< HEAD
     [Theory, CustomAutoData]
     public async Task GetCarByIdAsync_ReturnsNotFound_WhenCarDoesNotExist(CarDto carDto)
+=======
+    [Fact]
+    public async Task GetCarByIdAsync_ReturnsNotFound_WhenCarDoesNotExist()
         {
         int carId = 1;
         _mockCarService.Setup(s => s.GetCarByIdAsync(carId)).ReturnsAsync((CarDto)null);
@@ -62,11 +81,18 @@ public class CarsControllerTests
 
         Assert.IsType<NotFoundResult>(result.Result);
         }
+<<<<<<< HEAD
     [Theory, CustomAutoData]
     public async Task UpdateCarAsync_ReturnsUpdatedCarDto_WhenUpdateIsSuccessful(CarDto carDto)
         {
         // Arrange
 
+=======
+    [Fact]
+    public async Task UpdateCarAsync_ReturnsUpdatedCarDto_WhenUpdateIsSuccessful()
+        {
+        // Arrange
+        var carDto = new CarDto { Make = "Honda", Model = "Civic", Color = "Blue" };
         int carId = 1;
         _mockCarService.Setup(s => s.UpdateCarAsync(carId, carDto)).ReturnsAsync(carDto);
 
@@ -78,10 +104,16 @@ public class CarsControllerTests
         Assert.Equal(carDto, okResult.Value);
         }
 
+<<<<<<< HEAD
     [Theory, CustomAutoData]
     public async Task UpdateCarAsync_ReturnsNotFound_WhenCarDoesNotExist(CarDto carDto)
         {
 
+=======
+    [Fact]
+    public async Task UpdateCarAsync_ReturnsNotFound_WhenCarDoesNotExist()
+        {
+        var carDto = new CarDto { Make = "Honda", Model = "Civic", Color = "Blue" };
         int carId = 1;
         _mockCarService.Setup(s => s.UpdateCarAsync(carId, carDto)).ReturnsAsync((CarDto)null);
 
@@ -89,7 +121,10 @@ public class CarsControllerTests
 
         Assert.IsType<NotFoundResult>(result.Result);
         }
+<<<<<<< HEAD
     [Theory, CustomAutoData]
+=======
+    [Fact]
     public async Task DeleteCarAsync_ReturnsNoContent_WhenDeleteIsSuccessful()
         {
         int carId = 1;
@@ -100,11 +135,18 @@ public class CarsControllerTests
         Assert.IsType<NoContentResult>(result);
         _mockCarService.Verify(s => s.DeleteCarAsync(carId), Times.Once);
         }
+<<<<<<< HEAD
     [Theory, CustomAutoData]
     public async Task AddCarAsync_ReturnsAddedCarDto_WhenAdditionIsSuccessful(CarDto carDto)
         {
         // Arrange
 
+=======
+    [Fact]
+    public async Task AddCarAsync_ReturnsAddedCarDto_WhenAdditionIsSuccessful()
+        {
+        // Arrange
+        var carDto = new CarDto { Make = "Honda", Model = "Civic", Color = "Blue" };
         _mockCarService.Setup(s => s.AddCarAsync(carDto)).ReturnsAsync(carDto);
 
         // Act
@@ -114,6 +156,7 @@ public class CarsControllerTests
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         var returnedCarDto = okResult.Value as CarDto;
         Assert.NotNull(returnedCarDto);
+<<<<<<< HEAD
         Assert.Equal(carDto.Make, returnedCarDto.Make);
         Assert.Equal(carDto.Model, returnedCarDto.Model);
         Assert.Equal(carDto.Color, returnedCarDto.Color);
@@ -121,6 +164,14 @@ public class CarsControllerTests
         }
 
     [Theory, CustomAutoData]
+=======
+        Assert.Equal("Honda", returnedCarDto.Make);
+        Assert.Equal("Civic", returnedCarDto.Model);
+        Assert.Equal("Blue", returnedCarDto.Color);
+
+        }
+
+    [Fact]
     public async Task AddCarAsync_ReturnsBadRequest_WhenCarDtoIsNull()
         {
         // Arrange
