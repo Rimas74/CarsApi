@@ -11,28 +11,31 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography.Xml;
+using Microsoft.Extensions.FileProviders;
 
 namespace CarsApi
-    {
+{
     public class Program
-        {
+    {
         public static void Main(string[] args)
-            {
+        {
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
+
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = " Cars API", Version = "v1" });
                 options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
-                    {
+                {
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = JwtBearerDefaults.AuthenticationScheme
-                    });
+                });
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
                     {
                         {
@@ -69,6 +72,9 @@ namespace CarsApi
             builder.Services.AddScoped<ITokenRepository, TokenRepository>();
             builder.Services.AddScoped<ITokenService, TokenService>();
 
+            builder.Services.AddScoped<IImageRepository, LocalImageRepository>();
+
+
             builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Logging.ClearProviders();
@@ -94,7 +100,7 @@ namespace CarsApi
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 options.TokenValidationParameters = new TokenValidationParameters
-                    {
+                {
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
@@ -103,17 +109,17 @@ namespace CarsApi
                     ValidAudience = builder.Configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
                         System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-                    }
+                }
                 );
 
             var app = builder.Build();
 
 
             if (app.Environment.IsDevelopment())
-                {
+            {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                }
+            }
 
             app.UseHttpsRedirection();
 
@@ -121,10 +127,16 @@ namespace CarsApi
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+                RequestPath = "/Images" //http://localhost:1234/Images
+            });
+
 
             app.MapControllers();
 
             app.Run();
-            }
         }
     }
+}
